@@ -1,0 +1,22 @@
+{
+  "name": "material-dark",
+  "displayName": "Material Dark",
+  "isDark": true,
+  "colors": {
+    "background": "#263238",
+    "foreground": "#eeffff",
+    "comment": "#546e7a",
+    "keyword": "#c792ea",
+    "string": "#c3e88d",
+    "number": "#f78c6c",
+    "function": "#82aaff",
+    "variable": "#eeffff",
+    "type": "#ffcb6b",
+    "constant": "#f78c6c",
+    "operator": "#c792ea",
+    "punctuation": "#89ddff",
+    "property": "#82aaff",
+    "tag": "#f07178",
+    "attribute": "#c792ea"
+  }
+}

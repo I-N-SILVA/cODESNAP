@@ -1,0 +1,22 @@
+{
+  "name": "synthwave-84",
+  "displayName": "Synthwave '84",
+  "isDark": true,
+  "colors": {
+    "background": "#262335",
+    "foreground": "#f3f2fa",
+    "comment": "#848bbd",
+    "keyword": "#ff7edb",
+    "string": "#f2ff00",
+    "number": "#f97e72",
+    "function": "#36f9f6",
+    "variable": "#f3f2fa",
+    "type": "#ff8b39",
+    "constant": "#f97e72",
+    "operator": "#ff7edb",
+    "punctuation": "#f3f2fa",
+    "property": "#36f9f6",
+    "tag": "#ff7edb",
+    "attribute": "#f2ff00"
+  }
+}

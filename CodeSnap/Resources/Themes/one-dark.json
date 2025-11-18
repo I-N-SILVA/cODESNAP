@@ -1,0 +1,22 @@
+{
+  "name": "one-dark",
+  "displayName": "One Dark",
+  "isDark": true,
+  "colors": {
+    "background": "#282c34",
+    "foreground": "#abb2bf",
+    "comment": "#5c6370",
+    "keyword": "#c678dd",
+    "string": "#98c379",
+    "number": "#d19a66",
+    "function": "#61afef",
+    "variable": "#abb2bf",
+    "type": "#e5c07b",
+    "constant": "#d19a66",
+    "operator": "#c678dd",
+    "punctuation": "#abb2bf",
+    "property": "#61afef",
+    "tag": "#e06c75",
+    "attribute": "#d19a66"
+  }
+}

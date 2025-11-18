@@ -1,0 +1,22 @@
+{
+  "name": "solarized-light",
+  "displayName": "Solarized Light",
+  "isDark": false,
+  "colors": {
+    "background": "#fdf6e3",
+    "foreground": "#657b83",
+    "comment": "#93a1a1",
+    "keyword": "#859900",
+    "string": "#2aa198",
+    "number": "#d33682",
+    "function": "#268bd2",
+    "variable": "#657b83",
+    "type": "#b58900",
+    "constant": "#d33682",
+    "operator": "#859900",
+    "punctuation": "#657b83",
+    "property": "#268bd2",
+    "tag": "#dc322f",
+    "attribute": "#b58900"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "monokai-pro",
+  "displayName": "Monokai Pro",
+  "isDark": true,
+  "colors": {
+    "background": "#2d2a2e",
+    "foreground": "#fcfcfa",
+    "comment": "#727072",
+    "keyword": "#ff6188",
+    "string": "#ffd866",
+    "number": "#ab9df2",
+    "function": "#a9dc76",
+    "variable": "#fcfcfa",
+    "type": "#78dce8",
+    "constant": "#ab9df2",
+    "operator": "#ff6188",
+    "punctuation": "#fcfcfa",
+    "property": "#a9dc76",
+    "tag": "#ff6188",
+    "attribute": "#ffd866"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "nord-light",
+  "displayName": "Nord Light",
+  "isDark": false,
+  "colors": {
+    "background": "#eceff4",
+    "foreground": "#2e3440",
+    "comment": "#4c566a",
+    "keyword": "#5e81ac",
+    "string": "#a3be8c",
+    "number": "#b48ead",
+    "function": "#88c0d0",
+    "variable": "#2e3440",
+    "type": "#8fbcbb",
+    "constant": "#b48ead",
+    "operator": "#5e81ac",
+    "punctuation": "#2e3440",
+    "property": "#88c0d0",
+    "tag": "#bf616a",
+    "attribute": "#8fbcbb"
+  }
+}

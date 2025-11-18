@@ -1,0 +1,22 @@
+{
+  "name": "dracula",
+  "displayName": "Dracula",
+  "isDark": true,
+  "colors": {
+    "background": "#282a36",
+    "foreground": "#f8f8f2",
+    "comment": "#6272a4",
+    "keyword": "#ff79c6",
+    "string": "#f1fa8c",
+    "number": "#bd93f9",
+    "function": "#50fa7b",
+    "variable": "#f8f8f2",
+    "type": "#8be9fd",
+    "constant": "#bd93f9",
+    "operator": "#ff79c6",
+    "punctuation": "#f8f8f2",
+    "property": "#50fa7b",
+    "tag": "#ff79c6",
+    "attribute": "#50fa7b"
+  }
+}

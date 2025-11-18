@@ -1,0 +1,22 @@
+{
+  "name": "github-dark",
+  "displayName": "GitHub Dark",
+  "isDark": true,
+  "colors": {
+    "background": "#0d1117",
+    "foreground": "#c9d1d9",
+    "comment": "#8b949e",
+    "keyword": "#ff7b72",
+    "string": "#a5d6ff",
+    "number": "#79c0ff",
+    "function": "#d2a8ff",
+    "variable": "#c9d1d9",
+    "type": "#d2a8ff",
+    "constant": "#79c0ff",
+    "operator": "#ff7b72",
+    "punctuation": "#c9d1d9",
+    "property": "#79c0ff",
+    "tag": "#7ee787",
+    "attribute": "#d2a8ff"
+  }
+}

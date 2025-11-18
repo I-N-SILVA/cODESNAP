@@ -172,15 +172,30 @@ struct QuickPreviewView: View {
         isRendering = true
 
         Task {
-            // TODO: Implement actual rendering
-            // For now, create a placeholder
-            await MainActor.run {
-                // Placeholder rendering
-                let placeholderImage = NSImage(size: NSSize(width: 800, height: 600))
-                renderedImage = placeholderImage
-                isRendering = false
+            do {
+                // Use actual CodeRenderer
+                let image = try await CodeRenderer.shared.render(screenshot: screenshot)
+
+                await MainActor.run {
+                    renderedImage = image
+                    isRendering = false
+                }
+
+                // Auto-save if enabled
+                if AppSettingsManager.shared.settings.autoSaveScreenshots {
+                    try? await saveScreenshotToLibrary(image: image)
+                }
+            } catch {
+                await MainActor.run {
+                    isRendering = false
+                    showNotification(title: "Render Failed", message: error.localizedDescription)
+                }
             }
         }
+    }
+
+    private func saveScreenshotToLibrary(image: NSImage) async throws {
+        _ = try StorageManager.shared.saveScreenshot(screenshot, image: image)
     }
 
     private func copyToClipboard() {

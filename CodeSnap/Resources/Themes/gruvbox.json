@@ -1,0 +1,22 @@
+{
+  "name": "gruvbox",
+  "displayName": "Gruvbox Dark",
+  "isDark": true,
+  "colors": {
+    "background": "#282828",
+    "foreground": "#ebdbb2",
+    "comment": "#928374",
+    "keyword": "#fb4934",
+    "string": "#b8bb26",
+    "number": "#d3869b",
+    "function": "#fabd2f",
+    "variable": "#ebdbb2",
+    "type": "#fe8019",
+    "constant": "#d3869b",
+    "operator": "#fb4934",
+    "punctuation": "#ebdbb2",
+    "property": "#fabd2f",
+    "tag": "#fb4934",
+    "attribute": "#fe8019"
+  }
+}

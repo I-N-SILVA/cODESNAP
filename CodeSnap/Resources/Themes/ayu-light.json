@@ -1,0 +1,22 @@
+{
+  "name": "ayu-light",
+  "displayName": "Ayu Light",
+  "isDark": false,
+  "colors": {
+    "background": "#fafafa",
+    "foreground": "#5c6166",
+    "comment": "#828c99",
+    "keyword": "#fa8d3e",
+    "string": "#86b300",
+    "number": "#a37acc",
+    "function": "#f2ae49",
+    "variable": "#5c6166",
+    "type": "#399ee6",
+    "constant": "#a37acc",
+    "operator": "#fa8d3e",
+    "punctuation": "#5c6166",
+    "property": "#f2ae49",
+    "tag": "#fa8d3e",
+    "attribute": "#399ee6"
+  }
+}
