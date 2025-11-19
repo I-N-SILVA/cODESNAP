@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSnap Editor</title>
+    <link rel="stylesheet" href="styles/editor.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="tabs">
+                <button class="tab active" data-tab="code">Code</button>
+                <button class="tab" data-tab="style">Style</button>
+                <button class="tab" data-tab="window">Window</button>
+                <button class="tab" data-tab="export">Export</button>
+            </div>
+
+            <div class="tab-content active" id="code-tab">
+                <div class="setting-group">
+                    <label>Language</label>
+                    <select id="language">
+                        <option value="auto">Auto-detect</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="python">Python</option>
+                        <option value="swift">Swift</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>Font Family</label>
+                    <select id="fontFamily">
+                        <option value="JetBrains Mono">JetBrains Mono</option>
+                        <option value="Fira Code">Fira Code</option>
+                        <option value="Monaco">Monaco</option>
+                        <option value="Menlo">Menlo</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>Font Size: <span id="fontSizeValue">14</span>px</label>
+                    <input type="range" id="fontSize" min="12" max="24" value="14">
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="showLineNumbers" checked>
+                        Show line numbers
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="style-tab">
+                <div class="setting-group">
+                    <label>Theme</label>
+                    <div class="theme-grid" id="themeGrid">
+                        <!-- Themes will be populated here -->
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>Padding: <span id="paddingValue">48</span>px</label>
+                    <input type="range" id="padding" min="16" max="80" value="48" step="4">
+                </div>
+
+                <div class="setting-group">
+                    <label>Border Radius: <span id="borderRadiusValue">12</span>px</label>
+                    <input type="range" id="borderRadius" min="0" max="24" value="12" step="2">
+                </div>
+            </div>
+
+            <div class="tab-content" id="window-tab">
+                <div class="setting-group">
+                    <label>Window Style</label>
+                    <select id="windowStyle">
+                        <option value="none">None</option>
+                        <option value="macos" selected>macOS</option>
+                        <option value="browser">Browser</option>
+                        <option value="vscode">VS Code</option>
+                        <option value="terminal">Terminal</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>Background</label>
+                    <div class="background-options">
+                        <button class="bg-btn active" data-type="gradient">Gradient</button>
+                        <button class="bg-btn" data-type="solid">Solid</button>
+                        <button class="bg-btn" data-type="transparent">Transparent</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="enableShadow" checked>
+                        Enable shadow
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="export-tab">
+                <div class="setting-group">
+                    <label>Export Size</label>
+                    <select id="exportSize">
+                        <option value="1">1x</option>
+                        <option value="2" selected>2x (Retina)</option>
+                        <option value="3">3x</option>
+                        <option value="4">4x</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button class="action-btn primary" id="copyBtn">
+                        📋 Copy to Clipboard
+                    </button>
+                    <button class="action-btn" id="saveBtn">
+                        💾 Save to File
+                    </button>
+                    <button class="action-btn" id="shareBtn">
+                        ↗️ Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview">
+            <div class="preview-header">
+                <h2>Live Preview</h2>
+                <div class="preview-actions">
+                    <button id="zoomOut">-</button>
+                    <span id="zoomLevel">100%</span>
+                    <button id="zoomIn">+</button>
+                </div>
+            </div>
+            <div class="preview-content" id="previewContent">
+                <div class="loading">Click "Render" to generate preview</div>
+                <img id="previewImage" style="display: none;" />
+            </div>
+        </div>
+    </div>
+
+    <script src="editor.js"></script>
+</body>
+</html>

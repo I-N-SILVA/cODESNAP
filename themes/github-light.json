@@ -1,0 +1,22 @@
+{
+  "name": "github-light",
+  "displayName": "GitHub Light",
+  "isDark": false,
+  "colors": {
+    "background": "#ffffff",
+    "foreground": "#24292e",
+    "comment": "#6a737d",
+    "keyword": "#d73a49",
+    "string": "#032f62",
+    "number": "#005cc5",
+    "function": "#6f42c1",
+    "variable": "#24292e",
+    "type": "#6f42c1",
+    "constant": "#005cc5",
+    "operator": "#d73a49",
+    "punctuation": "#24292e",
+    "property": "#005cc5",
+    "tag": "#22863a",
+    "attribute": "#6f42c1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "one-light",
+  "displayName": "One Light",
+  "isDark": false,
+  "colors": {
+    "background": "#fafafa",
+    "foreground": "#383a42",
+    "comment": "#a0a1a7",
+    "keyword": "#a626a4",
+    "string": "#50a14f",
+    "number": "#986801",
+    "function": "#4078f2",
+    "variable": "#383a42",
+    "type": "#c18401",
+    "constant": "#986801",
+    "operator": "#a626a4",
+    "punctuation": "#383a42",
+    "property": "#4078f2",
+    "tag": "#e45649",
+    "attribute": "#986801"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "rose-pine-dawn",
+  "displayName": "Rosé Pine Dawn",
+  "isDark": false,
+  "colors": {
+    "background": "#faf4ed",
+    "foreground": "#575279",
+    "comment": "#9893a5",
+    "keyword": "#286983",
+    "string": "#56949f",
+    "number": "#d7827e",
+    "function": "#907aa9",
+    "variable": "#575279",
+    "type": "#ea9d34",
+    "constant": "#d7827e",
+    "operator": "#286983",
+    "punctuation": "#575279",
+    "property": "#907aa9",
+    "tag": "#b4637a",
+    "attribute": "#ea9d34"
+  }
+}

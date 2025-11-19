@@ -1,0 +1,22 @@
+{
+  "name": "catppuccin",
+  "displayName": "Catppuccin Mocha",
+  "isDark": true,
+  "colors": {
+    "background": "#1e1e2e",
+    "foreground": "#cdd6f4",
+    "comment": "#6c7086",
+    "keyword": "#cba6f7",
+    "string": "#a6e3a1",
+    "number": "#fab387",
+    "function": "#89b4fa",
+    "variable": "#cdd6f4",
+    "type": "#f5e0dc",
+    "constant": "#fab387",
+    "operator": "#cba6f7",
+    "punctuation": "#cdd6f4",
+    "property": "#89b4fa",
+    "tag": "#f38ba8",
+    "attribute": "#cba6f7"
+  }
+}
