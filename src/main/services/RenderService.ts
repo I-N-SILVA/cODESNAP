@@ -25,7 +25,7 @@ export class RenderService {
         });
     }
 
-    async render(screenshot: any): Promise<string> {
+    async render(screenshot: any, showWatermark: boolean = true, watermarkText: string = 'Created with CodeSnap'): Promise<string> {
         const {
             code,
             language,
@@ -44,19 +44,35 @@ export class RenderService {
         // Get theme
         const theme = this.themes.get(themeName) || this.themes.get('github-dark');
 
-        // Highlight code
-        const highlighted = this.highlightCode(code, language, theme);
+        // Highlight code and get tokenized lines
+        const highlightedLines = this.highlightCode(code, language, theme);
 
-        // Calculate dimensions
+        // Calculate dimensions accurately using canvas measureText
         const lineHeight = fontSize * 1.5;
         const lines = code.split('\n');
-        const longestLine = Math.max(...lines.map(l => l.length));
 
-        const textWidth = longestLine * fontSize * 0.6; // Approximate
+        // Create temporary canvas to measure text
+        const tempCanvas = createCanvas(100, 100);
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.font = `${fontSize}px "${fontFamily}", monospace`;
+
+        // Measure widest line
+        let maxWidth = 0;
+        lines.forEach((line, index) => {
+            let lineWidth = 0;
+            if (showLineNumbers) {
+                lineWidth += tempCtx.measureText(`${index + 1}`).width + 40;
+            }
+            const codeWidth = tempCtx.measureText(line).width;
+            lineWidth += codeWidth;
+            maxWidth = Math.max(maxWidth, lineWidth);
+        });
+
+        const textWidth = maxWidth;
         const textHeight = lines.length * lineHeight;
 
         const chromeHeight = this.getChromeHeight(windowStyle);
-        const contentWidth = textWidth + padding * 2;
+        const contentWidth = Math.max(textWidth + padding * 2, 400); // Minimum width
         const contentHeight = textHeight + padding * 2 + chromeHeight;
 
         // Calculate total size with shadow
@@ -90,48 +106,112 @@ export class RenderService {
         ctx.fillStyle = theme.colors.foreground;
 
         let y = shadowPadding + padding + chromeHeight + fontSize;
-        lines.forEach((line, index) => {
+        highlightedLines.forEach((lineTokens, index) => {
             const x = shadowPadding + padding;
 
             // Line numbers
             if (showLineNumbers) {
                 ctx.fillStyle = theme.colors.comment;
-                ctx.fillText(`${index + 1}`, x, y);
+                const lineNum = `${index + 1}`;
+                const lineNumWidth = ctx.measureText(lineNum).width;
+                ctx.fillText(lineNum, x, y);
                 ctx.fillStyle = theme.colors.foreground;
             }
 
-            // Code
+            // Code with syntax highlighting
             const codeX = showLineNumbers ? x + 40 : x;
-            this.renderLine(ctx, line, codeX, y, theme);
+            this.renderLine(ctx, lineTokens, codeX, y);
 
             y += lineHeight;
         });
 
         // Render watermark if enabled
-        const settings = await window.electronAPI.getSettings();
-        if (settings.showWatermark) {
-            this.renderWatermark(ctx, shadowPadding, shadowPadding, contentWidth, contentHeight, settings.watermarkText);
+        if (showWatermark) {
+            this.renderWatermark(ctx, shadowPadding, shadowPadding, contentWidth, contentHeight, watermarkText);
         }
 
         // Convert to data URL
         return canvas.toDataURL('image/png');
     }
 
-    private highlightCode(code: string, language: string, theme: any): string {
+    private highlightCode(code: string, language: string, theme: any): any[][] {
         try {
-            if (language === 'plaintext') {
-                return code;
+            if (language === 'plaintext' || language === 'auto') {
+                return code.split('\n').map(line => [{ text: line, color: theme.colors.foreground }]);
             }
+
             const result = hljs.highlight(code, { language });
-            return result.value;
+            return this.parseHighlightedHTML(result.value, theme);
         } catch (error) {
-            return code;
+            // Fallback to plaintext if highlighting fails
+            return code.split('\n').map(line => [{ text: line, color: theme.colors.foreground }]);
         }
     }
 
-    private renderLine(ctx: any, line: string, x: number, y: number, theme: any) {
-        // Simple rendering - in production, parse highlighted HTML
-        ctx.fillText(line, x, y);
+    private parseHighlightedHTML(html: string, theme: any): any[][] {
+        const lines = html.split('\n');
+        return lines.map(line => this.parseLineTokens(line, theme));
+    }
+
+    private parseLineTokens(html: string, theme: any): any[] {
+        const tokens: any[] = [];
+        const tokenRegex = /<span class="([^"]+)">([^<]*)<\/span>|([^<]+)/g;
+        let match;
+
+        while ((match = tokenRegex.exec(html)) !== null) {
+            if (match[1]) {
+                // Span with class
+                const className = match[1];
+                const text = this.decodeHTML(match[2]);
+                const color = this.getColorForClass(className, theme);
+                tokens.push({ text, color });
+            } else if (match[3]) {
+                // Plain text
+                const text = this.decodeHTML(match[3]);
+                tokens.push({ text, color: theme.colors.foreground });
+            }
+        }
+
+        return tokens.length > 0 ? tokens : [{ text: '', color: theme.colors.foreground }];
+    }
+
+    private getColorForClass(className: string, theme: any): string {
+        const colors = theme.colors;
+
+        // Map hljs classes to theme colors
+        if (className.includes('keyword')) return colors.keyword;
+        if (className.includes('string')) return colors.string;
+        if (className.includes('number')) return colors.number;
+        if (className.includes('function') || className.includes('title')) return colors.function;
+        if (className.includes('comment')) return colors.comment;
+        if (className.includes('type') || className.includes('class')) return colors.type;
+        if (className.includes('variable') || className.includes('params')) return colors.variable;
+        if (className.includes('operator')) return colors.operator;
+        if (className.includes('punctuation')) return colors.punctuation;
+        if (className.includes('property') || className.includes('attr')) return colors.property;
+        if (className.includes('tag') || className.includes('name')) return colors.tag;
+        if (className.includes('constant') || className.includes('built_in') || className.includes('literal')) return colors.constant;
+
+        return colors.foreground;
+    }
+
+    private decodeHTML(html: string): string {
+        return html
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+    }
+
+    private renderLine(ctx: any, tokens: any[], x: number, y: number) {
+        let currentX = x;
+
+        for (const token of tokens) {
+            ctx.fillStyle = token.color;
+            ctx.fillText(token.text, currentX, y);
+            currentX += ctx.measureText(token.text).width;
+        }
     }
 
     private renderBackground(

@@ -11,7 +11,9 @@
     "build:win": "electron-builder --win",
     "build:linux": "electron-builder --linux",
     "package": "electron-builder --dir",
-    "test": "jest"
+    "test": "jest",
+    "icons": "node scripts/generate-icons.js",
+    "postinstall": "npm run icons || echo 'Note: Run npm run icons after dependencies are installed'"
   },
   "keywords": [
     "code",

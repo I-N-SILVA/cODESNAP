@@ -39,7 +39,20 @@ body {
     color: #888;
     cursor: pointer;
     font-size: 13px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #007aff;
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab:hover {
@@ -50,7 +63,10 @@ body {
 .tab.active {
     color: #fff;
     background: #252525;
-    border-bottom: 2px solid #007aff;
+}
+
+.tab.active::after {
+    transform: scaleX(1);
 }
 
 .tab-content {
@@ -94,6 +110,29 @@ body {
     margin-right: 8px;
 }
 
+.setting-group textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
+    color: #fff;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.setting-group textarea::placeholder {
+    color: #666;
+}
+
+.setting-group textarea:focus {
+    outline: none;
+    border-color: #007aff;
+}
+
 /* Theme grid */
 .theme-grid {
     display: grid;
@@ -109,11 +148,17 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
 }
 
 .theme-btn:hover {
     background: #3a3a3a;
+    transform: scale(1.05);
+}
+
+.theme-btn:active {
+    transform: scale(0.95);
 }
 
 .theme-btn.active {
@@ -166,11 +211,17 @@ body {
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
 }
 
 .action-btn:hover {
     background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.action-btn:active {
+    transform: scale(0.98);
 }
 
 .action-btn.primary {

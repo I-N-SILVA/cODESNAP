@@ -15,6 +15,17 @@ let currentScreenshot = {
 };
 
 let currentImageDataUrl = null;
+let renderTimeout = null;
+
+// Debounced render function
+function debounceRender() {
+    if (renderTimeout) {
+        clearTimeout(renderTimeout);
+    }
+    renderTimeout = setTimeout(() => {
+        renderPreview();
+    }, 300);
+}
 
 // Tab switching
 document.querySelectorAll('.tab').forEach(tab => {
@@ -33,7 +44,17 @@ document.querySelectorAll('.tab').forEach(tab => {
     });
 });
 
-// Settings listeners
+// Initialize code editor
+const codeEditor = document.getElementById('codeEditor');
+if (codeEditor) {
+    codeEditor.value = currentScreenshot.code;
+    codeEditor.addEventListener('input', (e) => {
+        currentScreenshot.code = e.target.value;
+        debounceRender();
+    });
+}
+
+// Settings listeners with debouncing
 document.getElementById('language').addEventListener('change', (e) => {
     currentScreenshot.language = e.target.value;
     renderPreview();
@@ -48,7 +69,7 @@ document.getElementById('fontSize').addEventListener('input', (e) => {
     const value = e.target.value;
     currentScreenshot.fontSize = parseInt(value);
     document.getElementById('fontSizeValue').textContent = value;
-    renderPreview();
+    debounceRender();
 });
 
 document.getElementById('showLineNumbers').addEventListener('change', (e) => {
@@ -60,14 +81,14 @@ document.getElementById('padding').addEventListener('input', (e) => {
     const value = e.target.value;
     currentScreenshot.padding = parseInt(value);
     document.getElementById('paddingValue').textContent = value;
-    renderPreview();
+    debounceRender();
 });
 
 document.getElementById('borderRadius').addEventListener('input', (e) => {
     const value = e.target.value;
     currentScreenshot.borderRadius = parseInt(value);
     document.getElementById('borderRadiusValue').textContent = value;
-    renderPreview();
+    debounceRender();
 });
 
 document.getElementById('windowStyle').addEventListener('change', (e) => {
@@ -82,7 +103,7 @@ document.getElementById('enableShadow').addEventListener('change', (e) => {
 
 document.getElementById('exportSize').addEventListener('change', (e) => {
     currentScreenshot.exportSize = parseInt(e.target.value);
-    renderPreview();
+    // Don't re-render on export size change, just for export
 });
 
 // Background buttons
@@ -112,9 +133,17 @@ document.getElementById('copyBtn').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('saveBtn').addEventListener('click', () => {
-    // TODO: Implement save dialog
-    console.log('Save clicked');
+document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (currentImageDataUrl && currentScreenshot) {
+        try {
+            await window.electronAPI.saveScreenshot(currentScreenshot, currentImageDataUrl);
+            showNotification('Screenshot saved to library!');
+        } catch (error) {
+            showNotification('Failed to save: ' + error.message);
+        }
+    } else {
+        showNotification('Please render screenshot first');
+    }
 });
 
 document.getElementById('shareBtn').addEventListener('click', () => {
@@ -146,6 +175,15 @@ async function renderPreview() {
         const loading = document.querySelector('.loading');
         const img = document.getElementById('previewImage');
 
+        // Validate code
+        if (!currentScreenshot.code || currentScreenshot.code.trim().length === 0) {
+            loading.textContent = 'Enter some code to render...';
+            loading.style.display = 'block';
+            img.style.display = 'none';
+            return;
+        }
+
+        loading.textContent = 'Rendering...';
         loading.style.display = 'block';
         img.style.display = 'none';
 
@@ -158,6 +196,10 @@ async function renderPreview() {
         img.style.display = 'block';
 
     } catch (error) {
+        const loading = document.querySelector('.loading');
+        loading.textContent = `Error: ${error.message}`;
+        loading.style.display = 'block';
+        loading.style.color = '#ff5f57';
         console.error('Render failed:', error);
         showNotification('Render failed: ' + error.message);
     }
@@ -205,6 +247,27 @@ async function loadThemes() {
         grid.appendChild(btn);
     });
 }
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Cmd/Ctrl + S: Save
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        document.getElementById('saveBtn').click();
+    }
+
+    // Cmd/Ctrl + C: Copy (when not in textarea)
+    if ((e.metaKey || e.ctrlKey) && e.key === 'c' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        document.getElementById('copyBtn').click();
+    }
+
+    // Cmd/Ctrl + R: Re-render
+    if ((e.metaKey || e.ctrlKey) && e.key === 'r') {
+        e.preventDefault();
+        renderPreview();
+    }
+});
 
 // Initialize
 loadThemes();

@@ -47,6 +47,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            -webkit-app-region: drag;
+            cursor: move;
         }
 
         .header button {
@@ -56,8 +58,9 @@
             cursor: pointer;
             padding: 8px 16px;
             border-radius: 6px;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
             font-size: 14px;
+            -webkit-app-region: no-drag;
         }
 
         .header button:hover {
@@ -120,7 +123,12 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+        }
+
+        .actions button:active {
+            transform: scale(0.95);
         }
 
         .actions button:hover {
@@ -158,20 +166,24 @@
 
     <script>
         let currentImageDataUrl = null;
+        let currentScreenshot = null;
 
-        // Listen for screenshot data
-        window.electronAPI.onScreenshotData(async (data) => {
-            const { language, imageDataUrl } = data;
-            currentImageDataUrl = imageDataUrl;
+        // Listen for screenshot data from main process
+        if (window.electronAPI && window.electronAPI.onScreenshotData) {
+            window.electronAPI.onScreenshotData(async (data) => {
+                currentScreenshot = data;
+                const { language, imageDataUrl } = data;
+                currentImageDataUrl = imageDataUrl;
 
-            // Update UI
-            document.getElementById('language').textContent = language.toUpperCase();
-            document.getElementById('loading').style.display = 'none';
+                // Update UI
+                document.getElementById('language').textContent = language.toUpperCase();
+                document.getElementById('loading').style.display = 'none';
 
-            const img = document.getElementById('previewImage');
-            img.src = imageDataUrl;
-            img.style.display = 'block';
-        });
+                const img = document.getElementById('previewImage');
+                img.src = imageDataUrl;
+                img.style.display = 'block';
+            });
+        }
 
         // Copy to clipboard
         document.getElementById('copyBtn').addEventListener('click', async () => {
@@ -182,21 +194,28 @@
         });
 
         // Save to file
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            // TODO: Show save dialog
-            console.log('Save clicked');
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            if (currentScreenshot && currentImageDataUrl) {
+                try {
+                    await window.electronAPI.saveScreenshot(currentScreenshot, currentImageDataUrl);
+                    showNotification('Screenshot saved!');
+                } catch (error) {
+                    showNotification('Failed to save screenshot');
+                }
+            }
         });
 
         // Share
         document.getElementById('shareBtn').addEventListener('click', () => {
-            // TODO: Show share sheet
-            console.log('Share clicked');
+            // Will implement OS share dialog
+            showNotification('Share feature coming soon!');
         });
 
         // Edit
         document.getElementById('editBtn').addEventListener('click', () => {
-            // TODO: Open editor window
-            console.log('Edit clicked');
+            // Will implement opening editor with current screenshot
+            showNotification('Opening in editor...');
+            window.close();
         });
 
         // Close

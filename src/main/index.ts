@@ -48,7 +48,21 @@ function createMainWindow() {
 function createTray() {
     // Create tray icon
     const iconPath = path.join(__dirname, '../assets/tray-icon.png');
-    tray = new Tray(iconPath);
+
+    // Create tray with icon if exists, otherwise use native image
+    try {
+        if (require('fs').existsSync(iconPath)) {
+            tray = new Tray(iconPath);
+        } else {
+            // Create a simple native image as fallback
+            const icon = nativeImage.createEmpty();
+            tray = new Tray(icon);
+        }
+    } catch (error) {
+        console.error('Tray icon error:', error);
+        const icon = nativeImage.createEmpty();
+        tray = new Tray(icon);
+    }
 
     const contextMenu = Menu.buildFromTemplate([
         {
@@ -151,7 +165,7 @@ async function performQuickCapture() {
         };
 
         // Render screenshot
-        const imageDataUrl = await renderService.render(screenshot);
+        const imageDataUrl = await renderService.render(screenshot, settings.showWatermark, settings.watermarkText);
 
         // Save to library if enabled
         if (settings.autoSaveScreenshots) {
@@ -238,7 +252,8 @@ function getDefaultSettings() {
 
 // IPC Handlers
 ipcMain.handle('render-screenshot', async (_event, screenshot) => {
-    return await renderService.render(screenshot);
+    const settings = store.get('settings', getDefaultSettings());
+    return await renderService.render(screenshot, settings.showWatermark, settings.watermarkText);
 });
 
 ipcMain.handle('save-screenshot', async (_event, screenshot, imageDataUrl) => {
